@@ -6,3 +6,8 @@ So what would this look like.  The way I am going to demonstrate and create this
 test, the tests for the String [Calculator Kata](http://osherove.com/tdd-kata-1/).  The code for this can be found in
 [test/sc](./test/sc).
 
+## String Calculator Kata
+
+### given a blank string should return 0
+
+This is a trivial test and offers no generative opportunity.
