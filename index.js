@@ -20,14 +20,28 @@ const forAll = gen => predicate =>
     );
 
 
+// forAll2 :: Generator t1 -> Generator t2 -> (t1 -> t2 -> Assertion) -> Assertion
+const forAll2 = gen1 => gen2 => predicate =>
+    gen1.then(stream1 =>
+        gen2.then(stream2 =>
+            stream1.zip(stream2).foldn(ITERATIONS)(Promise.resolve(true))(acc => item => acc.then(_ => predicate(item[0])(item[1])))
+        )
+    );
+
+
+// seedStream :: Random.PRNG -> InfiniteStream Random.PRNG
+const seedStream = seed =>
+    InfiniteStream.Cons(seed)(() => seedStream(seed.next()));
+
+
+// seedStream :: Random.PRNG -> InfiniteStream (InfiniteStream Random.PRNG)
+const seedStreamOfStream = seed =>
+    InfiniteStream.Cons(seedStream(seed))(() => seedStreamOfStream(seed.next()));
+
+
 // randoms :: () -> Promise _ (InfiniteStream Random.PRNG)
-const randoms = () => {
-    const randomList = s =>
-        InfiniteStream.Cons(s)(() => randomList(s.next()));
-
-    return Random.Random().then(seed => randomList(seed));
-};
-
+const randoms = () =>
+    Random.Random().then(seed => seedStream(seed));
 
 
 // arrayOf :: Generator Int -> Generator i -> Generator (Array t)
@@ -43,5 +57,8 @@ const arrayOf = lengthGen => itemGen => {
 module.exports = {
     arrayOf,
     forAll,
-    randoms
+    forAll2,
+    randoms,
+    seedStream,
+    seedStreamOfStream
 };
