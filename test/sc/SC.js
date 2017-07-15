@@ -1,4 +1,4 @@
-const Array = mrequire("core:Native.Data.Array:1.0.0");
+const Array = require("../Lib").Array;
 
 
 const split = input => separators =>
