@@ -45,21 +45,37 @@ const mkString = nums => seps => {
 module.exports =
     Unit.Suite("String Calculator Kata")([
         Unit.Test("given a blank string should return 0")(
-            Assertion.equals(0)(add(""))),
+            Assertion
+                .isTrue(add("").isJust())
+                .equals(0)(add("").withDefault(0))),
+
         Unit.Test("given an integer should return it's value")(
-            Generative.forAll(integers)(n =>
-                Assertion.equals(n)(add(n.toString())))
-        ),
+            Generative.forAll(integers)(n => {
+                const result = add(n.toString());
+
+                return Assertion
+                    .isTrue(result.isJust())
+                    .equals(n)(result.withDefault(0));
+            })),
+
         Unit.Test("given integers separated with a comma or newline should return the sum")(
-            Generative.forAll2(arrayOfIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps =>
-                Assertion.equals(Array.sum(ns))(add(mkString(ns)(seps)))
-            )
+            Generative.forAll2(arrayOfIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps => {
+                const result = add(mkString(ns)(seps));
+
+                return Assertion
+                    .isTrue(result.isJust())
+                    .equals(Array.sum(ns))(result.withDefault(0))
+            })
         ),
+
         Unit.Test("given integers separated with a single character custom separator should return the sum")(
             Generative.forAll2(arrayOfIntegers)(separators)(ns => sep => {
-                const input = "//" + sep + "\n" + Array.join(sep)(ns);
+                const result = add("//" + sep + "\n" + Array.join(sep)(ns));
 
-                return Assertion.equals(Array.sum(ns))(add(input))
+                return Assertion
+                    .isTrue(result.isJust())
+                    .equals(Array.sum(ns))(result.withDefault(0))
             })
         )
-    ]);
+    ])
+;
