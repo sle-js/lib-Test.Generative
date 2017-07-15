@@ -18,8 +18,11 @@ const parse = input =>
     tokenize(input).map(s => parseInt(s));
 
 
-const add = input =>
-    Result.Okay(Array.sum(parse(input)));
+const add = input => {
+    const numbers = parse(input);
+
+    return Result.Okay(Array.sum(numbers));
+};
 
 
 module.exports =
