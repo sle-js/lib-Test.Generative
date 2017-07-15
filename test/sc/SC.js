@@ -1,5 +1,5 @@
 const Array = require("../Lib").Array;
-const Maybe = require("../Lib").Maybe;
+const Result = require("./Result");
 
 
 const split = input => separators =>
@@ -19,7 +19,7 @@ const parse = input =>
 
 
 const add = input =>
-    Maybe.Just(Array.sum(parse(input)));
+    Result.Okay(Array.sum(parse(input)));
 
 
 module.exports =

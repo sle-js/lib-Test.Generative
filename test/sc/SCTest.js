@@ -46,7 +46,7 @@ module.exports =
     Unit.Suite("String Calculator Kata")([
         Unit.Test("given a blank string should return 0")(
             Assertion
-                .isTrue(add("").isJust())
+                .isTrue(add("").isOkay())
                 .equals(0)(add("").withDefault(0))),
 
         Unit.Test("given an integer should return it's value")(
@@ -54,7 +54,7 @@ module.exports =
                 const result = add(n.toString());
 
                 return Assertion
-                    .isTrue(result.isJust())
+                    .isTrue(result.isOkay())
                     .equals(n)(result.withDefault(0));
             })),
 
@@ -63,7 +63,7 @@ module.exports =
                 const result = add(mkString(ns)(seps));
 
                 return Assertion
-                    .isTrue(result.isJust())
+                    .isTrue(result.isOkay())
                     .equals(Array.sum(ns))(result.withDefault(0))
             })
         ),
@@ -73,7 +73,7 @@ module.exports =
                 const result = add("//" + sep + "\n" + Array.join(sep)(ns));
 
                 return Assertion
-                    .isTrue(result.isJust())
+                    .isTrue(result.isOkay())
                     .equals(Array.sum(ns))(result.withDefault(0))
             })
         )
