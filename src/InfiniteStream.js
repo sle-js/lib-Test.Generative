@@ -39,6 +39,27 @@ InfiniteStreamType.prototype.foldn = function(n) {
     };
 };
 
+
+InfiniteStreamType.prototype.takeAsArray = function(n) {
+    const result = [];
+    let cursor = this;
+    for (let lp = 0; lp < n; lp += 1) {
+        result.push(cursor.head());
+        cursor = cursor.tail();
+    }
+    return result;
+};
+
+
+InfiniteStreamType.prototype.drop = function(n) {
+    let cursor = this;
+    for (let lp = 0; lp < n; lp += 1) {
+        cursor = cursor.tail();
+    }
+    return cursor;
+};
+
+
 module.exports = {
     Cons
 };
