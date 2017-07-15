@@ -1,4 +1,7 @@
-module.exports = {
-    Assertion: mrequire("core:Test.Unit.Assertion:1.0.0"),
+const Libs = require("../src/Lib");
+
+
+module.exports = Object.assign({}, Libs, {
+    Assertion: mrequire("core:Test.Unit.Assertion:1.1.0"),
     Unit: mrequire("core:Test.Unit:0.0.1")
-};
+});
