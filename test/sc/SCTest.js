@@ -20,13 +20,6 @@ const arrayOfIntegers =
     Generative.arrayOf(integerStream(0)(10))(integers);
 
 
-// oneOfStream :: Array String -> Generator (InfiniteStream String)
-const oneOfStream = items =>
-    Random.Random().then(seed =>
-        Generative.seedStreamOfStream(seed)
-            .map(s => s.map(c => items[c.asIntInRange(0)(items.length - 1)])));
-
-
 // mkString :: Array Int -> InfiniteStream String -> String
 const mkString = nums => seps => {
     if (nums.length === 0) {
@@ -48,7 +41,7 @@ module.exports =
                 Assertion.equals(n)(add(n.toString())))
         ),
         Unit.Test("given integers separated with a comma or newline should return the sum")(
-            Generative.forAll2(arrayOfIntegers)(oneOfStream([",", "\n"]))(ns => seps =>
+            Generative.forAll2(arrayOfIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps =>
                 Assertion.equals(Array.sum(ns))(add(mkString(ns)(seps)))
             )
         )
