@@ -6,4 +6,11 @@ assumptionEqual(0, Array.sum([]));
 assumptionEqual(6, Array.sum([1, 2, 3]));
 
 
+Array.drop = n => a =>
+    Array.slice(n)(Array.length(a))(a);
+assumptionEqual([], Array.drop(1)([1]));
+assumptionEqual([2, 3, 4], Array.drop(1)([1, 2, 3, 4]));
+assumptionEqual([3, 4], Array.drop(2)([1, 2, 3, 4]));
+
+
 module.exports = Array;
