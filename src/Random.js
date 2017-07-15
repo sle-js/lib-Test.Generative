@@ -4,7 +4,7 @@
 //
 // interface PRNG where
 //   next :: () -> PRNG
-//   asInt :: () -> Int
+//   asIntInRange :: () -> Int
 //   asFloat :: () -> Float
 //   toString :: () -> String
 //
@@ -21,7 +21,7 @@ PRNGType.prototype.next = function () {
 };
 
 
-PRNGType.prototype.asInt = function (min) {
+PRNGType.prototype.asIntInRange = function (min) {
     return max => (Math.round(this.asFloat() * (max - min) + min)) | 0;
 };
 
