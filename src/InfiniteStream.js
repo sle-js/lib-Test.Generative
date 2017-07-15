@@ -23,6 +23,22 @@ InfiniteStreamType.prototype.map = function (f) {
 };
 
 
+InfiniteStreamType.prototype.foldn = function(n) {
+    return initialValue => iterationFunction => {
+        let count = 0;
+        let result = initialValue;
+        let current = this;
+
+        while (count < n) {
+            result = iterationFunction(result)(current.head());
+            current = current.tail();
+            count += 1;
+        }
+
+        return result;
+    };
+};
+
 module.exports = {
     Cons
 };
