@@ -27,7 +27,7 @@ const isDigit = n =>
 
 // separators :: Promise _ (InfiniteStream Char)
 const separators =
-    Generative.map(n => String.fromCharCode(n))(Generative.filter(n => !isDigit(n) && n !== 45)(integerStream(33)(127)));
+    Generative.map(String.fromCharCode)(Generative.filter(n => !isDigit(n) && n !== 45)(integerStream(33)(127)));
 
 
 // mkString :: Array Int -> InfiniteStream String -> String
