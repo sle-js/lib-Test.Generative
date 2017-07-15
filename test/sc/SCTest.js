@@ -47,11 +47,6 @@ module.exports =
             Generative.forAll(integers)(n =>
                 Assertion.equals(n)(add(n.toString())))
         ),
-        Unit.Test("given integers separated with a comma should return the sum")(
-            Generative.forAll(arrayOfIntegers)(ns =>
-                Assertion.equals(Array.sum(ns))(add(Array.join(",")(ns)))
-            )
-        ),
         Unit.Test("given integers separated with a comma or newline should return the sum")(
             Generative.forAll2(arrayOfIntegers)(oneOfStream([",", "\n"]))(ns => seps =>
                 Assertion.equals(Array.sum(ns))(add(mkString(ns)(seps)))
