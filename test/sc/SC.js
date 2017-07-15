@@ -1,8 +1,16 @@
 const Array = mrequire("core:Native.Data.Array:1.0.0");
 
 
+const split = input => separators =>
+    input === ""
+        ? []
+        : input.split(separators);
+
+
 const tokenize = input =>
-    input.split(/[,\n]/);
+    input.startsWith("//")
+        ? split(input.substring(4))(input[2])
+        : split(input)(/[,\n]/);
 
 
 const parse = input =>
@@ -10,7 +18,7 @@ const parse = input =>
 
 
 const add = input =>
-    input === "" ? 0 : Array.sum(parse(input));
+    Array.sum(parse(input));
 
 
 module.exports =

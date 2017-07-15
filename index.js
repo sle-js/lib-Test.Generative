@@ -61,10 +61,20 @@ const oneOfStream = items =>
             .map(s => s.map(c => items[c.asIntInRange(0)(items.length - 1)])));
 
 
+const map = f => gen =>
+    gen.then(stream => stream.map(f));
+
+
+const filter = f => gen =>
+    gen.then(stream => stream.filter(f));
+
+
 module.exports = {
     arrayOf,
+    filter,
     forAll,
     forAll2,
+    map,
     oneOfStream,
     randoms,
     seedStream,

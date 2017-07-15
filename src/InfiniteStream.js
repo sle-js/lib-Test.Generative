@@ -18,6 +18,21 @@ InfiniteStreamType.prototype.tail = function () {
 };
 
 
+InfiniteStreamType.prototype.filter = function (f) {
+    let cursor = this;
+
+    while(true) {
+        const head = cursor.head();
+
+        if (f(head)) {
+            return new InfiniteStreamType(head, () => cursor.tail().filter(f));
+        } else {
+            cursor = cursor.tail();
+        }
+    }
+};
+
+
 InfiniteStreamType.prototype.map = function (f) {
     return new InfiniteStreamType(f(this._head), () => this._tail().map(f));
 };

@@ -11,13 +11,23 @@ const integerStream = min => max =>
     Generative.randoms().then(things => things.map(s => s.asIntInRange(min)(max)));
 
 
-// integers :: () -> Promise _ (InfiniteStream Int)
+// integers :: Promise _ (InfiniteStream Int)
 const integers =
     integerStream(-10000)(10000);
 
 
+// arrayOfIntegers :: Promise _ (InfiniteStream (Array Int))
 const arrayOfIntegers =
     Generative.arrayOf(integerStream(0)(10))(integers);
+
+
+const isDigit = n =>
+    (n >= 48 && n <= 58);
+
+
+// separators :: Promise _ (InfiniteStream Char)
+const separators =
+    Generative.map(n => String.fromCharCode(n))(Generative.filter(n => !isDigit(n) && n !== 45)(integerStream(33)(127)));
 
 
 // mkString :: Array Int -> InfiniteStream String -> String
@@ -44,5 +54,12 @@ module.exports =
             Generative.forAll2(arrayOfIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps =>
                 Assertion.equals(Array.sum(ns))(add(mkString(ns)(seps)))
             )
+        ),
+        Unit.Test("given integers separated with a single character custom separator should return the sum")(
+            Generative.forAll2(arrayOfIntegers)(separators)(ns => sep => {
+                const input = "//" + sep + "\n" + Array.join(sep)(ns);
+
+                return Assertion.equals(Array.sum(ns))(add(input))
+            })
         )
     ]);
