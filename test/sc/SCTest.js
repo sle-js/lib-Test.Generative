@@ -13,12 +13,12 @@ const integerStream = min => max =>
 
 // integers :: Promise _ (InfiniteStream Int)
 const nonNegativeIntegers =
-    integerStream(0)(10000);
+    integerStream(0)(1500);
 
 
 // arrayOfIntegers :: Promise _ (InfiniteStream (Array Int))
 const arrayOfIntegers =
-    Generative.arrayOf(integerStream(0)(10))(integerStream(-10000)(10000));
+    Generative.arrayOf(integerStream(0)(10))(integerStream(-1500)(1500));
 
 
 const arrayOfNonNegativeIntegers =
@@ -51,6 +51,10 @@ const mkString = nums => seps => {
 };
 
 
+const sum = ns =>
+    Array.sum(Array.filter(n => n <= 1000)(ns));
+
+
 module.exports =
     Unit.Suite("String Calculator Kata")([
         Unit.Test("given a blank string should return 0")(
@@ -58,32 +62,32 @@ module.exports =
                 .isTrue(add("").isOkay())
                 .equals(0)(add("").withDefault(0))),
 
-        Unit.Test("given an integer should return it's value")(
+        Unit.Test("given an integer should return it's value if <= 1000 else 0")(
             Generative.forAll(nonNegativeIntegers)(n => {
                 const result = add(n.toString());
 
                 return Assertion
                     .isTrue(result.isOkay())
-                    .equals(n)(result.withDefault(0));
+                    .equals(n <= 1000 ? n : 0)(result.withDefault(0));
             })),
 
-        Unit.Test("given integers separated with a comma or newline should return the sum")(
+        Unit.Test("given integers separated with a comma or newline should return the sum of all numbers <= 1000")(
             Generative.forAll2(arrayOfNonNegativeIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps => {
                 const result = add(mkString(ns)(seps));
 
                 return Assertion
                     .isTrue(result.isOkay())
-                    .equals(Array.sum(ns))(result.withDefault(0))
+                    .equals(sum(ns))(result.withDefault(0))
             })
         ),
 
-        Unit.Test("given integers separated with a single character custom separator should return the sum")(
+        Unit.Test("given integers separated with a single character custom separator should return the sum of all numbers <= 1000")(
             Generative.forAll2(arrayOfNonNegativeIntegers)(separators)(ns => sep => {
                 const result = add("//" + sep + "\n" + Array.join(sep)(ns));
 
                 return Assertion
                     .isTrue(result.isOkay())
-                    .equals(Array.sum(ns))(result.withDefault(0))
+                    .equals(sum(ns))(result.withDefault(0))
             })
         ),
 

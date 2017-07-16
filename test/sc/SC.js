@@ -24,7 +24,7 @@ const add = input => {
     if (Array.any(n => n < 0)(numbers)) {
         return Result.Error(Array.join(", ")(Array.filter(n => n < 0)(numbers)));
     } else {
-        return Result.Okay(Array.sum(numbers));
+        return Result.Okay(Array.sum(Array.filter(n => n <= 1000)(numbers)));
     }
 };
 
