@@ -8,17 +8,29 @@ const split = input => separators =>
         : input.split(separators);
 
 
+const quoteRegExp = function(str) {
+    return (str+'').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+};
+
+
 const tokenize = input => {
     if (input.startsWith("//[")) {
         const indexOfNewline = input.indexOf("\n");
+        const separators = new RegExp(input
+            .substring(3, indexOfNewline - 1)
+            .split("][")
+            .sort((a, b) => b.length - a.length)
+            .map(x => quoteRegExp(x))
+            .join("|"));
 
-        return split(input.substring(indexOfNewline + 1))(input.substring(3, indexOfNewline - 1));
+        return split(input.substring(indexOfNewline + 1))(separators);
     } else if (input.startsWith("//")) {
         return split(input.substring(4))(input[2]);
     } else {
         return split(input)(/[,\n]/);
     }
 };
+
 
 const parse = input =>
     tokenize(input).map(s => parseInt(s));

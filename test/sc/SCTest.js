@@ -36,11 +36,15 @@ const isDigit = n =>
 
 // separators :: Promise _ (InfiniteStream Char)
 const separators =
-    Generative.map(String.fromCharCode)(Generative.filter(n => !isDigit(n) && n !== 45)(integerStream(33)(127)));
+    Generative.map(String.fromCharCode)(Generative.filter(n => !isDigit(n) && n !== 45 && n !== 91)(integerStream(32)(127)));
 
 
 const multiSeparators =
     Generative.map(x => Array.join("")(x))(Generative.arrayOf(integerStream(1)(10))(separators));
+
+
+const multipleMultiSeparators =
+    Generative.arrayOf(integerStream(1)(10))(multiSeparators);
 
 
 // mkString :: Array Int -> InfiniteStream String -> String
@@ -95,15 +99,17 @@ module.exports =
             })
         ),
 
-        Unit.Test("given integers separated with a single multi-character custom separator should return the sum of all numbers <= 1000")(
-            Generative.forAll2(arrayOfNonNegativeIntegers)(multiSeparators)(ns => sep => {
-                const result = add("//[" + sep + "]\n" + Array.join(sep)(ns));
+        Unit.Test("given integers separated with multiple multi-character custom separator should return the sum of all numbers <= 1000")(
+            Generative.forAll2(arrayOfNonNegativeIntegers)(multipleMultiSeparators)(ns => seps =>
+                Generative.oneOf(seps).then(sepStream => {
+                    const input = "//[" + Array.join("][")(seps) + "]\n" + mkString(ns)(sepStream);
+                    const result = add(input);
 
-                return Assertion
-                    .isTrue(result.isOkay())
-                    .equals(sum(ns))(result.withDefault(0))
-            })
-        ),
+                    return Assertion
+                        .isTrue(result.isOkay())
+                        .equals(sum(ns))(result.withDefault(0))
+                })
+            )),
 
         Unit.Test("given integers with at least one negative should return an error with the negative numbers")(
             Generative.forAll(arrayOfIntegersWithNegatives)(ns => {

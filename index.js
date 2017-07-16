@@ -54,7 +54,14 @@ const arrayOf = lengthGen => itemGen => {
 };
 
 
-// oneOfStream :: Array String -> Generator (InfiniteStream String)
+// oneOf :: Array i -> Generator (InfiniteStream i)
+const oneOf = items =>
+    Random.Random().then(seed =>
+        seedStream(seed)
+            .map(c => items[c.asIntInRange(0)(items.length - 1)]));
+
+
+// oneOfStream :: Array i -> Generator (InfiniteStream i)
 const oneOfStream = items =>
     Random.Random().then(seed =>
         seedStreamOfStream(seed)
@@ -75,6 +82,7 @@ module.exports = {
     forAll,
     forAll2,
     map,
+    oneOf,
     oneOfStream,
     randoms,
     seedStream,
