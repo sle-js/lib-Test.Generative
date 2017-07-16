@@ -65,6 +65,13 @@ assumptionEqual(Okay(10).withDefault(0), 10);
 assumptionEqual(Error(10).withDefault(0), 0);
 
 
+Result.prototype.errorWithDefault = function(okayValue) {
+    return this.reduce(constant(okayValue))(identity);
+};
+assumptionEqual(Okay(10).errorWithDefault(0), 0);
+assumptionEqual(Error(10).errorWithDefault(0), 10);
+
+
 module.exports = {
     Error,
     Okay
