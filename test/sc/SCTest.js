@@ -12,13 +12,23 @@ const integerStream = min => max =>
 
 
 // integers :: Promise _ (InfiniteStream Int)
-const integers =
-    integerStream(-10000)(10000);
+// integers :: Promise _ (InfiniteStream Int)
+const nonNegativeIntegers =
+    integerStream(0)(10000);
 
 
 // arrayOfIntegers :: Promise _ (InfiniteStream (Array Int))
 const arrayOfIntegers =
-    Generative.arrayOf(integerStream(0)(10))(integers);
+    Generative.arrayOf(integerStream(0)(10))(integerStream(-10000)(10000));
+
+
+const arrayOfNonNegativeIntegers =
+    Generative.arrayOf(integerStream(0)(10))(nonNegativeIntegers);
+
+
+// arrayOfIntegers :: Promise _ (InfiniteStream (Array Int))
+const arrayOfIntegersWithNegatives =
+    Generative.filter(ns => Array.any(n => n < 0)(ns))(arrayOfIntegers);
 
 
 const isDigit = n =>
@@ -50,7 +60,7 @@ module.exports =
                 .equals(0)(add("").withDefault(0))),
 
         Unit.Test("given an integer should return it's value")(
-            Generative.forAll(integers)(n => {
+            Generative.forAll(nonNegativeIntegers)(n => {
                 const result = add(n.toString());
 
                 return Assertion
@@ -59,7 +69,7 @@ module.exports =
             })),
 
         Unit.Test("given integers separated with a comma or newline should return the sum")(
-            Generative.forAll2(arrayOfIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps => {
+            Generative.forAll2(arrayOfNonNegativeIntegers)(Generative.oneOfStream([",", "\n"]))(ns => seps => {
                 const result = add(mkString(ns)(seps));
 
                 return Assertion
@@ -69,13 +79,23 @@ module.exports =
         ),
 
         Unit.Test("given integers separated with a single character custom separator should return the sum")(
-            Generative.forAll2(arrayOfIntegers)(separators)(ns => sep => {
+            Generative.forAll2(arrayOfNonNegativeIntegers)(separators)(ns => sep => {
                 const result = add("//" + sep + "\n" + Array.join(sep)(ns));
 
                 return Assertion
                     .isTrue(result.isOkay())
                     .equals(Array.sum(ns))(result.withDefault(0))
             })
-        )
+        ),
+
+        Unit.Test("given integers with at least one negative should return an error with the negative numbers")(
+            Generative.forAll(arrayOfIntegersWithNegatives)(ns => {
+                const result = add(Array.join(",")(ns));
+
+                return Assertion
+                    .isTrue(result.isError())
+                    .equals(Array.join(", ")(Array.filter(n => n < 0)(ns)))(result.errorWithDefault(""))
+            })
+        ),
     ])
 ;

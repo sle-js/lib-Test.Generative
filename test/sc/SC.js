@@ -21,7 +21,11 @@ const parse = input =>
 const add = input => {
     const numbers = parse(input);
 
-    return Result.Okay(Array.sum(numbers));
+    if (Array.any(n => n < 0)(numbers)) {
+        return Result.Error(Array.join(", ")(Array.filter(n => n < 0)(numbers)));
+    } else {
+        return Result.Okay(Array.sum(numbers));
+    }
 };
 
 
