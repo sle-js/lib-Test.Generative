@@ -12,7 +12,6 @@ const integerStream = min => max =>
 
 
 // integers :: Promise _ (InfiniteStream Int)
-// integers :: Promise _ (InfiniteStream Int)
 const nonNegativeIntegers =
     integerStream(0)(10000);
 
