@@ -8,11 +8,13 @@ const split = input => separators =>
         : input.split(separators);
 
 
-const tokenize = input =>
-    input.startsWith("//")
-        ? split(input.substring(4))(input[2])
-        : split(input)(/[,\n]/);
-
+const tokenize = input => {
+    if (input.startsWith("//")) {
+        return split(input.substring(4))(input[2]);
+    } else {
+        return split(input)(/[,\n]/);
+    }
+};
 
 const parse = input =>
     tokenize(input).map(s => parseInt(s));
