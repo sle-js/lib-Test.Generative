@@ -13,4 +13,10 @@ assumptionEqual([2, 3, 4], Array.drop(1)([1, 2, 3, 4]));
 assumptionEqual([3, 4], Array.drop(2)([1, 2, 3, 4]));
 
 
+Array.any = p => a =>
+    a.some(p);
+assumption(!Array.any(x => x < 0)([1, 2, 3, 4]));
+assumption(Array.any(x => x < 0)([1, 2, -3, 4]));
+
+
 module.exports = Array;
