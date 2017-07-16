@@ -39,6 +39,10 @@ const separators =
     Generative.map(String.fromCharCode)(Generative.filter(n => !isDigit(n) && n !== 45)(integerStream(33)(127)));
 
 
+const multiSeparators =
+    Generative.map(x => Array.join("")(x))(Generative.arrayOf(integerStream(1)(10))(separators));
+
+
 // mkString :: Array Int -> InfiniteStream String -> String
 const mkString = nums => seps => {
     if (nums.length === 0) {
@@ -84,6 +88,16 @@ module.exports =
         Unit.Test("given integers separated with a single character custom separator should return the sum of all numbers <= 1000")(
             Generative.forAll2(arrayOfNonNegativeIntegers)(separators)(ns => sep => {
                 const result = add("//" + sep + "\n" + Array.join(sep)(ns));
+
+                return Assertion
+                    .isTrue(result.isOkay())
+                    .equals(sum(ns))(result.withDefault(0))
+            })
+        ),
+
+        Unit.Test("given integers separated with a single multi-character custom separator should return the sum of all numbers <= 1000")(
+            Generative.forAll2(arrayOfNonNegativeIntegers)(multiSeparators)(ns => sep => {
+                const result = add("//[" + sep + "]\n" + Array.join(sep)(ns));
 
                 return Assertion
                     .isTrue(result.isOkay())

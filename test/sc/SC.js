@@ -9,7 +9,11 @@ const split = input => separators =>
 
 
 const tokenize = input => {
-    if (input.startsWith("//")) {
+    if (input.startsWith("//[")) {
+        const indexOfNewline = input.indexOf("\n");
+
+        return split(input.substring(indexOfNewline + 1))(input.substring(3, indexOfNewline - 1));
+    } else if (input.startsWith("//")) {
         return split(input.substring(4))(input[2]);
     } else {
         return split(input)(/[,\n]/);
