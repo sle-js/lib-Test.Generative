@@ -46,11 +46,10 @@ const randoms = () =>
 
 // arrayOf :: Generator Int -> Generator i -> Generator (Array t)
 const arrayOf = lengthGen => itemGen => {
-    const randomArray = lengthStream => itemStream =>
-        InfiniteStream.Cons(itemStream.takeAsArray(lengthStream.head()))(() => randomArray(lengthStream.drop(1))(itemStream.drop(lengthStream.head())));
+    const randomArray = lengths => items =>
+        InfiniteStream.Cons(items.takeAsArray(lengths.head()))(() => randomArray(lengths.drop(1))(items.drop(lengths.head())));
 
-    return Promise.all([lengthGen, itemGen])
-        .then(streams => Promise.resolve(randomArray(streams[0])(streams[1])));
+    return lengthGen.then(lengths => itemGen.then(items => randomArray(lengths)(items)));
 };
 
 
