@@ -1,4 +1,4 @@
-const Libs = require("../src/Lib");
+const Libs = require("../src/Libs");
 
 
 module.exports = Object.assign({}, Libs, {

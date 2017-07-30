@@ -1,4 +1,4 @@
-const Unit = require("./test/Lib").Unit;
+const Unit = require("./test/Libs").Unit;
 
 require("./test/sc/SCTest")
     .then(Unit.showErrors)

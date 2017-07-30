@@ -1,4 +1,4 @@
-const InfiniteStream = require("./src/InfiniteStream");
+const InfiniteStream = require("./src/Libs").InfiniteStream;
 const Random = require("./src/Random");
 
 

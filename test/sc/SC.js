@@ -1,4 +1,4 @@
-const Array = require("../Lib").Array;
+const Array = require("../Libs").Array;
 const Result = require("./Result");
 
 
