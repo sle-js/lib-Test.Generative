@@ -1,3 +1,3 @@
 module.exports = {
-    Array: require("./Array")
+    Array: mrequire("core:Native.Data.Array:1.1.0")
 };
