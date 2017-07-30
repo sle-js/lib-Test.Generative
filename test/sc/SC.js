@@ -8,9 +8,8 @@ const split = input => separators =>
         : input.split(separators);
 
 
-const quoteRegExp = function(str) {
-    return (str+'').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-};
+const quoteRegExp = str =>
+    str.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
 
 
 const tokenize = input => {
