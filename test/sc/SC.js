@@ -19,7 +19,7 @@ const tokenize = input => {
             .substring(3, indexOfNewline - 1)
             .split("][")
             .sort((a, b) => b.length - a.length)
-            .map(x => quoteRegExp(x))
+            .map(quoteRegExp)
             .join("|"));
 
         return split(input.substring(indexOfNewline + 1))(separators);
