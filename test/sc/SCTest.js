@@ -1,7 +1,6 @@
 const Array = require("./../Libs").Array;
 const Assertion = require("./../Libs").Assertion;
 const Generative = require("../../index");
-const InfiniteStream = require("../../src/InfiniteStream");
 const Random = require("../../src/Random");
 const Unit = require("./../Libs").Unit;
 
